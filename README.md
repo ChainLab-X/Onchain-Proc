@@ -1,126 +1,207 @@
-# Onchain-Proc
+# VaultsIQ — Smart Contracts
 
-An open-source platform for Ethereum-based projects. Explore, contribute, and showcase smart contracts and decentralized applications built on Ethereum and EVM-compatible chains.
+Solidity smart contracts for VaultsIQ - a decentralized vault platform enabling users to create multiple ERC-4626 compliant vaults for automated yield generation. Deployed on Base Sepolia testnet.
 
-## 🌟 About
+## Overview
 
-Onchain-Proc is a community-driven repository where developers can:
-- **Submit** their Ethereum smart contract projects
-- **Explore** innovative blockchain applications
-- **Contribute** to open-source Web3 projects
-- **Learn** from real-world implementations
+VaultsIQ is a comprehensive DeFi platform that allows users to:
 
-## 📁 Repository Structure
+- **Create Multiple Vaults**: Each user can create multiple personal ERC-4626 compliant vaults
+- **Automated Yield Generation**: Deploy assets to DeFi protocols (Aave, Compound, Uniswap) automatically
+- **ERC-4626 Standard**: Industry-standard tokenized vault interface for maximum interoperability
+- **Share-Based Ownership**: Transferable ERC-20 vault shares representing ownership
+- **Protocol Allocations**: Configure how assets are distributed across different DeFi protocols
+
+
+VaultsIQ smart contracts implement:
+
+### VaultFactory Contract
+
+- **Multi-vault creation** for registered users
+- **User registration system** with username and bio
+- **Protocol address management** (Aave, Compound, Uniswap, WETH)
+- **Admin system** for protocol configuration
+- **Vault tracking** and ownership management
+
+### UserVault Contract (ERC-4626)
+
+- **ERC-4626 standard compliance** for tokenized vaults
+- **ERC-20 share tokens** representing vault ownership
+- **Deposit/Withdraw/Mint/Redeem** operations
+- **Protocol integration** for yield generation
+- **Allocation management** across DeFi protocols
+- **Pause/unpause** functionality
+
+Built with Solidity, Hardhat, and deployed on Base Sepolia testnet.
+
+## Tech Stack
+
+- **Language:** Solidity ^0.8.20
+- **Framework:** Hardhat
+- **Testing:** Hardhat Test Suite, Chai
+- **Network:** Base Sepolia Testnet
+- **Chain ID:** 84532
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Compile contracts
+npx hardhat compile
+
+# Run tests
+npx hardhat test
+
+# Deploy to Base Sepolia
+npx hardhat run scripts/deploy.js --network baseSepolia
+```
+
+## Project Structure
 
 ```
-Onchain-Proc/
-├── cohort-xii/          # Smart Contract Projects (125+ projects)
-│   └── submissions/     # Community-submitted smart contracts
-└── cohort-xiii/         # Frontend Applications
-    └── Web3bridge-Web3-Cohort-XIII/  # Decentralized app interfaces
+vaultsiq-smartcontracts/
+├── contracts/
+│   ├── VaultFactory.sol          # Factory contract for vault deployment
+│   ├── UserVault.sol             # ERC-4626 compliant vault contract
+│   ├── interfaces/
+│   │   ├── IERC4626.sol          # ERC-4626 interface
+│   │   ├── IERC20.sol            # ERC-20 interface
+│   │   └── IProtocol.sol         # Protocol interface
+│   └── libraries/
+│       └── VaultMath.sol         # Math utilities for vault calculations
+├── scripts/
+│   ├── deploy.js                 # Deployment script
+│   ├── verify.js                 # Contract verification script
+│   └── initialize.js             # Contract initialization script
+├── test/
+│   ├── VaultFactory.test.js      # Factory contract tests
+│   ├── UserVault.test.js         # Vault contract tests
+│   └── integration.test.js       # Integration tests
+├── hardhat.config.js             # Hardhat configuration
+└── package.json                  # Dependencies
 ```
 
-## 🚀 Getting Started
+## Contract Architecture
 
-### For Smart Contract Development
+### VaultFactory.sol
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/VaultsX/Onchain-Proc.git
-   cd Onchain-Proc
-   ```
+**Purpose:** Central factory managing vault creation, user registration, and protocol configuration.
 
-2. **Set up your environment**
-   ```bash
-   # Copy the example environment file
-   cp .env.example .env
-   
-   # Add your private key and RPC URLs
-   nano .env
-   ```
+**Key Functions:**
+- `registerUser(string username, string bio)` - Register user profile
+- `createVault(address asset)` - Create new ERC-4626 vault
+- `getUserVaults(address user)` - Get all vaults for a user
+- `setAaveAddress(address)` - Admin: Set Aave protocol address
+- `addAdmin(address)` - Admin: Add new admin
 
-3. **Compile contracts** (using the root Hardhat config)
-   ```bash
-   npx hardhat compile
-   ```
+**Events:**
+- `VaultCreated(address indexed owner, address indexed vault, uint256 timestamp)`
+- `UserRegistered(address indexed user, uint256 timestamp)`
 
-4. **Deploy to your preferred network**
-   ```bash
-   npx hardhat run scripts/deploy.js --network <network-name>
-   ```
+### UserVault.sol
 
-### Supported Networks
+**Purpose:** Individual ERC-4626 compliant vault with DeFi protocol integration.
 
-The `hardhat.config.ts` supports deployment to:
-- **Ethereum**: Mainnet, Sepolia
-- **Base**: Mainnet, Sepolia
-- **Arbitrum**: Mainnet, Sepolia
-- **Optimism**: Mainnet, Sepolia
-- **Polygon**: Mainnet, Amoy
-- **Scroll**: Mainnet, Sepolia
-- **Celo**: Mainnet, Alfajores
-- And more...
+**Key Functions (ERC-4626):**
+- `deposit(uint256 assets, address receiver)` - Deposit assets, receive shares
+- `withdraw(uint256 assets, address receiver, address owner)` - Withdraw assets
+- `mint(uint256 shares, address receiver)` - Mint shares for assets
+- `redeem(uint256 shares, address receiver, address owner)` - Redeem shares
+- `totalAssets()` - Total assets managed by vault
+- `convertToShares(uint256 assets)` - Convert assets to shares
+- `convertToAssets(uint256 shares)` - Convert shares to assets
 
-## 🤝 Contributing
+**Key Functions (Vault Management):**
+- `setProtocolAllocation(string protocol, uint256 amount)` - Configure allocation
+- `deployToAave(uint256 amount)` - Deploy assets to Aave
+- `deployToCompound(uint256 amount)` - Deploy assets to Compound
+- `pause()` / `unpause()` - Emergency controls
 
-We welcome contributions from developers of all skill levels!
+**Events:**
+- `Deposit(address indexed sender, address indexed owner, uint256 assets, uint256 shares)`
+- `Withdraw(address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares)`
 
-### Submit Your Project
+## Contributing
 
-1. **Fork** this repository
-2. **Create** a new folder in `cohort-xii/submissions/` for smart contracts or `cohort-xiii/Web3bridge-Web3-Cohort-XIII/` for frontends
-3. **Add** your project files with clear documentation
-4. **Submit** a pull request with a description of your project
+We welcome contributions! To get started:
 
-### Project Guidelines
+1. **Pick an issue** from [`ISSUES.md`](./ISSUES.md)
+2. **Create a branch** using the issue number: `issue/<number>-short-description`
+3. **Implement your changes** following the issue's acceptance criteria
+4. **Write tests** for your changes
+5. **Submit a PR** with the issue number in the title/description
 
-- Include a README in your project folder
-- Add comments to your code
-- Follow Solidity best practices for smart contracts
-- Test your code before submitting
+When pushing your changes, include the issue number or title in your commit messages.
 
-## 🔧 Environment Setup
+## Environment Variables
 
-Create a `.env` file based on `.env.example`:
+Create a `.env` file:
 
 ```env
-# Your wallet private key (NEVER commit this!)
-PRIVATE_KEY=your_private_key_here
-
-# RPC URLs for different networks
+PRIVATE_KEY=your_private_key
 BASE_SEPOLIA_RPC_URL=https://sepolia.base.org
-BASE_RPC_URL=https://mainnet.base.org
-
-# API key for contract verification
-ETHERSCAN_API_KEY=your_etherscan_api_key_here
+ETHERSCAN_API_KEY=your_etherscan_api_key
 ```
 
-**⚠️ Security Note**: Never commit your `.env` file or private keys to version control!
+**Note:** Never commit your private key or `.env` file to version control!
 
-## 📚 Explore Projects
+## Network Configuration
 
-Browse through `cohort-xii/submissions/` to discover:
-- DeFi protocols
-- NFT contracts
-- DAO implementations
-- Token standards (ERC-20, ERC-721, ERC-4626)
-- Governance systems
-- And much more!
+### Base Sepolia Testnet
 
-## 🌐 Community
+- **Chain ID:** 84532
+- **RPC URL:** `https://sepolia.base.org`
+- **Explorer:** [Base Sepolia Explorer](https://sepolia.basescan.org/)
+- **Faucet:** [Base Sepolia Faucet](https://www.coinbase.com/faucets/base-ethereum-goerli-faucet)
 
-- **GitHub**: [VaultsX/Onchain-Proc](https://github.com/VaultsX/Onchain-Proc)
-- **Issues**: Report bugs or request features
-- **Discussions**: Share ideas and get help
+## Deployment
 
-## 📜 License
+### Deploy VaultFactory
 
-This repository and its projects are open-source. Individual projects may have their own licenses - please check each project's README for details.
+```bash
+npx hardhat run scripts/deploy.js --network baseSepolia
+```
 
-## 🙏 Acknowledgments
+### Initialize VaultFactory
 
-Thanks to all contributors who have shared their projects and helped build this community resource!
+```bash
+npx hardhat run scripts/initialize.js --network baseSepolia
+```
 
----
+### Verify Contracts
 
-**Start exploring, learning, and contributing to the future of decentralized applications!**
+```bash
+npx hardhat verify --network baseSepolia <CONTRACT_ADDRESS> <CONSTRUCTOR_ARGS>
+```
+
+## Testing
+
+```bash
+# Run all tests
+npx hardhat test
+
+# Run specific test file
+npx hardhat test test/UserVault.test.js
+
+# Run tests with gas reporting
+REPORT_GAS=true npx hardhat test
+
+# Coverage report
+npx hardhat coverage
+```
+
+## Security
+
+- All contracts follow best practices
+- Access control implemented for admin functions
+- Reentrancy guards on critical functions
+- Input validation on all user inputs
+- Comprehensive test coverage
+
+**Note:** Contracts should be audited before mainnet deployment.
+
+## License
+
+MIT License - see LICENSE file for details.
