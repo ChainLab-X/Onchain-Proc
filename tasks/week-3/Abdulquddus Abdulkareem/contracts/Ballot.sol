@@ -1,22 +1,3 @@
-Here is the corrected version of your README file with improved formatting and clarity:
-
----
-
-# Hands-on Practice with Hardhat
-
-## Task
-
-Deploy the `Ballot.sol` smart contract to 4 different chains using Hardhat:
-
-1. **Amoy**
-2. **Lisk Sepolia**
-3. **Sepolia**  
-   *Note: Verify the contract you deploy to the Sepolia testnet.*
-4. **Meter**
-
-## Smart Contract Code: Ballot.sol
-
-```solidity
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.7.0 <0.9.0;
@@ -49,17 +30,17 @@ contract Ballot {
      * @dev Create a new ballot to choose one of 'proposalNames'.
      * @param proposalNames names of proposals
      */
-    constructor(bytes32[] memory proposalNames) {
-        chairperson = msg.sender;
-        voters[chairperson].weight = 1;
+    // constructor(bytes32[] memory proposalNames) {
+    //     chairperson = msg.sender;
+    //     voters[chairperson].weight = 1;
 
-        for (uint i = 0; i < proposalNames.length; i++) {
-            proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
-            }));
-        }
-    }
+    //     for (uint i = 0; i < proposalNames.length; i++) {
+    //         proposals.push(Proposal({
+    //             name: proposalNames[i],
+    //             voteCount: 0
+    //         }));
+    //     }
+    // }
 
     /** 
      * @dev Give 'voter' the right to vote on this ballot. May only be called by 'chairperson'.
@@ -146,12 +127,3 @@ contract Ballot {
         winnerName_ = proposals[winningProposal()].name;
     }
 }
-```
-
----
-
-### Notes:
-1. **Amoy Network** - Follow the specific steps for deploying to the Amoy network.
-2. **Lisk Sepolia** - Make sure to deploy the contract to the Sepolia testnet using Lisk's configuration.
-3. **Sepolia Testnet Verification** - After deploying to Sepolia, ensure that the contract is verified on Etherscan or any other relevant block explorer.
-4. **Meter Network** - Follow the steps for deploying to the Meter network.
