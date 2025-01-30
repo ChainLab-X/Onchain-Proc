@@ -1,7 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 require('dotenv').config()
-const {ALCHEMY_SEPOLIA_API_KEY_URL, ACCOUNT_PRIVATE_KEY, AMOY_SEPOLIA_KEY, LISK_SEPOLIA_KEY, METER_KEY } = process.env;
+const {ALCHEMY_SEPOLIA_API_KEY_URL, ACCOUNT_PRIVATE_KEY, AMOY_SEPOLIA_KEY, LISK_SEPOLIA_KEY, METER_KEY, ETHERSCAN_API_KEY } = process.env;
 
 
 const config: HardhatUserConfig = {
@@ -26,6 +26,10 @@ const config: HardhatUserConfig = {
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     }
   },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
+       
+  }   
 };
 
 export default config;
