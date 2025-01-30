@@ -5,8 +5,8 @@ require("dotenv").config()
 const {
   ALCHEMY_SEPOLIA_API_KEY_URL,
   ALCHEMY_AMOY_API_KEY_URL,
-  ALCHEMY_LISK_API_KEY_URL,
-  ALCHEMY_METER_API_KEY_URL, 
+  LISK_API_KEY_URL,
+  METER_API_KEY_URL, 
   ACCOUNT_PRIVATE_KEY, 
   ETHERSCAN_API_KEY} = process.env
 
@@ -24,11 +24,11 @@ const config: HardhatUserConfig = {
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     },
     lisk: {
-      url: ALCHEMY_LISK_API_KEY_URL,
+      url: LISK_API_KEY_URL,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     },
     meter: {
-      url: ALCHEMY_METER_API_KEY_URL,
+      url: METER_API_KEY_URL,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     },
   },
