@@ -9,8 +9,8 @@ contract DecentralizedVoting {
         uint256 voteCount;
     }
     
-    Candidate[] public candidates;
-    mapping(address => bool) public hasVoted;
+    Candidate[] public candidates
+    mapping(address => bool) public hasVoted
     mapping(string => bool) private candidateExists;
     
     event CandidateAdded(string name);
