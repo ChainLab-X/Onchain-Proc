@@ -2,7 +2,7 @@
 
 pragma solidity >=0.7.0 <0.9.0;
 
-/**
+/** 
  * @title Ballot
  * @dev Implements voting process along with vote delegation
  */
@@ -26,23 +26,7 @@ contract Ballot {
 
     Proposal[] public proposals;
 
-    /**
-     * @dev Create a new ballot to choose one of 'proposalNames'.
-     * @param proposalNames names of proposals
-     */
-    constructor(bytes32[] memory proposalNames) {
-        chairperson = msg.sender;
-        voters[chairperson].weight = 1;
-
-        for (uint i = 0; i < proposalNames.length; i++) {
-            proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
-            }));
-        }
-    }
-
-    /**
+    /** 
      * @dev Give 'voter' the right to vote on this ballot. May only be called by 'chairperson'.
      * @param voter address of voter
      */
@@ -105,7 +89,7 @@ contract Ballot {
         proposals[proposal].voteCount += sender.weight;
     }
 
-    /**
+    /** 
      * @dev Computes the winning proposal taking all previous votes into account.
      * @return winningProposal_ index of winning proposal in the proposals array
      */
@@ -119,7 +103,7 @@ contract Ballot {
         }
     }
 
-    /**
+    /** 
      * @dev Calls winningProposal() function to get the index of the winner contained in the proposals array and then
      * @return winnerName_ the name of the winner
      */
