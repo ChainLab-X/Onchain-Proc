@@ -23,4 +23,6 @@
 
 ## Deployment Script
 
-Used a `deploy.ts` script to deploy the contract to the Meter network.
+Used a [deploy](./scripts/deploy.ts) script to deploy the contract to the Meter network.
+
+Command: ``` npx hardhat run scripts/deploy.ts --network meter ```
