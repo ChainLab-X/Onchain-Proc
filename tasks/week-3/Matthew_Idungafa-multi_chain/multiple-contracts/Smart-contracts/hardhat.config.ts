@@ -11,7 +11,7 @@ const config: HardhatUserConfig = {
       url: ALCHEMY_SEPOLIA_API_KEY_URL,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     },
-    amoy: {
+    amoy: { 
       url: AMOY_RPC_URL,
       accounts: [`0x${ACCOUNT_PRIVATE_KEY}`]
     },
