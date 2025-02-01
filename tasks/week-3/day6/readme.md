@@ -1,6 +1,7 @@
 # Class Registration System
 
-This project is a simple class registration system built with **Solidity** for the smart contract and **React** for the frontend. The admin can register students for a class, and users can view all registered students.
+**This project is a simple class registration system built with **Solidity** for the smart contract and **React** for the frontend. The admin can register students for a class, and users can view all registered students.**
+
 ---
 
 **Deployment contract address:** `0x8ccc2d03f38b5816c23d956a9aa467ea7f3269c9`
