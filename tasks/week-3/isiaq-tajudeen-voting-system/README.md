@@ -8,6 +8,6 @@ The contract allows the owner to add candidates, and users can vote for their pr
 3. **Input Validation**: Ensures candidate names are not empty and candidate IDs are valid.
 4. **Data Storage**: Uses structs to store candidate details and mappings to track voters activities i.e checking if they have casted vote or not.
 
-## Concepts Used
+## Deployed details
 1. **VotingSystemModule#VotingSystem Address**: (0xb7D165292dA19BE617d7E0C6b983CFA2b3716BFE).
 1. **Contract Address Verification Link**: (https://sepolia.etherscan.io/address/0xb7D165292dA19BE617d7E0C6b983CFA2b3716BFE#code).
