@@ -80,26 +80,26 @@ contract CECE is IERC20 {
         return true;
     }
 
-    // ✅ Mint new tokens (Only Owner)
+    //Mint new tokens (Only Owner)
     function mint(address to, uint256 amount) external onlyOwner {
         require(to != address(0), "Mint to zero address");
         _mint(to, amount);
     }
 
-    // ✅ Burn tokens from caller's balance
+    //Burn tokens from caller's balance
     function burn(uint256 amount) external {
         require(_balances[msg.sender] >= amount, "Burn amount exceeds balance");
         _burn(msg.sender, amount);
     }
 
-    // ✅ Internal function to mint tokens
+    //Internal function to mint tokens
     function _mint(address to, uint256 amount) internal {
         _totalSupply += amount;
         _balances[to] += amount;
         emit Transfer(address(0), to, amount);
     }
 
-    // ✅ Internal function to burn tokens
+    //Internal function to burn tokens
     function _burn(address from, uint256 amount) internal {
         _balances[from] -= amount;
         _totalSupply -= amount;
