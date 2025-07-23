@@ -1,0 +1,41 @@
+{
+  "_format": "hh-sol-cache-2",
+  "files": {
+    "/home/debielily/Desktop/Web3bridge-Web3-Cohort-XIII/onsite-program/submissions/Deborah_Olaboye/contracts/Storage.sol": {
+      "lastModificationDate": 1753199796724,
+      "contentHash": "45aaeae1340395a74fa5ed8b82cf9f4c",
+      "sourceName": "contracts/Storage.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "0.8.28"
+      ],
+      "artifacts": [
+        "Storage"
+      ]
+    }
+  }
+}
