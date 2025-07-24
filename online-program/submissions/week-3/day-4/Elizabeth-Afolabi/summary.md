@@ -44,3 +44,8 @@ contract HotFudgeSauce {
         // What happens if qtyCups = 0 when this func is called?
     }
 }
+- the keyword contract informs EVM that it's compiling a smart contract
+- semicolons are very important in solidity
+
+## Constructors
+A constructor in Solidity is a special function that runs only once when a smart contract is created. It is used to set initial values for the contract’s variables at deployment time, making the contract configurable. When the constructor runs, its code is not included in the final deployed contract. 
