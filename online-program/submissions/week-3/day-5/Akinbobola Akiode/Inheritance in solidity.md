@@ -59,11 +59,12 @@ Also, i learnt function modifiers are inheritable
 
 Some constructors specify input parameters and so they need you to pass arguments to them when instantiating the smart contract. If that smart contract is a parent contract, then its derived contracts must also pass arguments to instantiate the parent contracts. And there are two ways to do this:
 
-- **either in the statement that lists the parent contracts
-- **Or directly in the constructors function for each parent contract.
+- **either in the statement that lists the parent contracts**
+- **Or directly in the constructors function for each parent contract.**
 
 ### Example 
 
+```
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -81,7 +82,7 @@ contract childB is parentA {
         return "Hi from childB!";
     }
 }
-
+```
 
 ## Why Use Inheritance?
 
