@@ -103,6 +103,7 @@ const config: HardhatUserConfig = {
     },
     baseSepolia: {
       url: "https://sepolia.base.org",
+      chainId: 84532,
       accounts: [deployerPrivateKey],
     },
     scrollSepolia: {
