@@ -20,3 +20,9 @@ contract VaultFactory is Ownable, ReentrancyGuard {
     uint256 public constant MAX_USERNAME_LENGTH = 20;
     uint256 public constant MAX_BIO_LENGTH = 30;
 
+    // Custom errors for gas optimization
+    error AlreadyRegistered(address user);
+    error InvalidUsername(string reason);
+    error InvalidBio(string reason);
+    error UserNotRegistered(address user);
+
