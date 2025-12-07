@@ -14,12 +14,14 @@ import "../interfaces/IERC4626.sol";
 contract MockERC4626Vault is ERC20, IERC4626 {
     using SafeERC20 for IERC20;
 
-    IERC20Metadata private immutable _asset;
+    IERC20 private immutable _asset;
+    IERC20Metadata private immutable _assetMetadata;
     uint8 private immutable _decimals;
 
     constructor(address asset_) ERC20("Mock Vault Share", "MVS") {
-        _asset = IERC20Metadata(asset_);
-        _decimals = _asset.decimals();
+        _asset = IERC20(asset_);
+        _assetMetadata = IERC20Metadata(asset_);
+        _decimals = _assetMetadata.decimals();
     }
 
     function decimals() public view virtual override returns (uint8) {
@@ -31,7 +33,7 @@ contract MockERC4626Vault is ERC20, IERC4626 {
     //////////////////////////////////////////////////////////////*/
 
     function asset() public view virtual override returns (address) {
-        return address(_asset);
+        return address(_assetMetadata);
     }
 
     function totalAssets() public view virtual override returns (uint256) {
