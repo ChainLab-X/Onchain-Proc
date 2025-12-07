@@ -1,12 +1,14 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import type { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
+import type { MockERC20, MockERC4626Vault } from "../typechain-types";
 
 describe("IERC4626 Interface", function () {
-  let mockAsset;
-  let mockVault;
-  let owner;
-  let user1;
-  let user2;
+  let mockAsset: MockERC20;
+  let mockVault: MockERC4626Vault;
+  let owner: HardhatEthersSigner;
+  let user1: HardhatEthersSigner;
+  let user2: HardhatEthersSigner;
 
   // Deploy a simple ERC20 mock for testing
   beforeEach(async function () {
@@ -193,7 +195,7 @@ describe("IERC4626 Interface", function () {
       const tx = await mockVault.deposit(assets, owner.address);
       const receipt = await tx.wait();
       
-      const depositEvent = receipt.logs.find(
+      const depositEvent = receipt?.logs.find(
         log => {
           try {
             const parsed = mockVault.interface.parseLog(log);
@@ -205,10 +207,12 @@ describe("IERC4626 Interface", function () {
       );
 
       expect(depositEvent).to.not.be.undefined;
-      const parsed = mockVault.interface.parseLog(depositEvent);
-      expect(parsed.args.sender).to.equal(owner.address);
-      expect(parsed.args.owner).to.equal(owner.address);
-      expect(parsed.args.assets).to.equal(assets);
+      if (depositEvent) {
+        const parsed = mockVault.interface.parseLog(depositEvent);
+        expect(parsed?.args.sender).to.equal(owner.address);
+        expect(parsed?.args.owner).to.equal(owner.address);
+        expect(parsed?.args.assets).to.equal(assets);
+      }
     });
 
     it("Should emit Withdraw event with correct parameters", async function () {
@@ -223,7 +227,7 @@ describe("IERC4626 Interface", function () {
       const tx = await mockVault.withdraw(withdrawAmount, owner.address, owner.address);
       const receipt = await tx.wait();
       
-      const withdrawEvent = receipt.logs.find(
+      const withdrawEvent = receipt?.logs.find(
         log => {
           try {
             const parsed = mockVault.interface.parseLog(log);
@@ -235,11 +239,13 @@ describe("IERC4626 Interface", function () {
       );
 
       expect(withdrawEvent).to.not.be.undefined;
-      const parsed = mockVault.interface.parseLog(withdrawEvent);
-      expect(parsed.args.sender).to.equal(owner.address);
-      expect(parsed.args.receiver).to.equal(owner.address);
-      expect(parsed.args.owner).to.equal(owner.address);
-      expect(parsed.args.assets).to.equal(withdrawAmount);
+      if (withdrawEvent) {
+        const parsed = mockVault.interface.parseLog(withdrawEvent);
+        expect(parsed?.args.sender).to.equal(owner.address);
+        expect(parsed?.args.receiver).to.equal(owner.address);
+        expect(parsed?.args.owner).to.equal(owner.address);
+        expect(parsed?.args.assets).to.equal(withdrawAmount);
+      }
     });
   });
 
