@@ -16,3 +16,7 @@ contract VaultFactory is Ownable, ReentrancyGuard {
     mapping(address => string) public userBios;
     mapping(address => uint256) public userRegistrationTimestamps;
 
+    // Validation constants
+    uint256 public constant MAX_USERNAME_LENGTH = 20;
+    uint256 public constant MAX_BIO_LENGTH = 30;
+
