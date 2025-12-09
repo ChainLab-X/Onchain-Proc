@@ -11,8 +11,26 @@ import "./interfaces/IERC4626.sol";
 
 /**
  * @title UserVault
+ * @author VaultsIQ
  * @dev ERC-4626 compliant vault contract for managing user assets
  * @notice This contract implements the ERC-4626 standard for tokenized vaults
+ * 
+ * Features:
+ * - Full ERC-4626 standard compliance
+ * - Deposit, withdraw, mint, and redeem operations
+ * - Protocol allocation management (Aave, Compound)
+ * - Pause/unpause functionality for emergency stops
+ * - Owner access control for vault management
+ * - Share-based ownership with ERC-20 tokens
+ * 
+ * Security:
+ * - Reentrancy protection on all state-changing functions
+ * - Access control via OpenZeppelin Ownable
+ * - Pausable for emergency stops
+ * - Input validation on all user inputs
+ * - Custom errors for gas optimization
+ * 
+ * @custom:security-contact security@vaultsiq.com
  */
 contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
     using SafeERC20 for IERC20;
