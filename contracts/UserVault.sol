@@ -561,6 +561,71 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         // For now, this is a placeholder that can be extended
     }
 
+    /*//////////////////////////////////////////////////////////////
+                        ADDITIONAL VIEW FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Get vault information summary
+     * @return assetAddress Address of underlying asset
+     * @return totalAssets_ Total assets in vault
+     * @return totalShares Total shares minted
+     * @return owner_ Address of vault owner
+     */
+    function getVaultInfo() 
+        external 
+        view 
+        returns (
+            address assetAddress,
+            uint256 totalAssets_,
+            uint256 totalShares,
+            address owner_
+        ) 
+    {
+        return (address(_assetMetadata), totalAssets(), totalSupply(), owner());
+    }
+
+    /**
+     * @dev Get protocol deployment information
+     * @param protocol Name of the protocol
+     * @return allocated Allocation amount for protocol
+     * @return deployed Currently deployed amount to protocol
+     */
+    function getProtocolInfo(string memory protocol) 
+        external 
+        view 
+        returns (uint256 allocated, uint256 deployed) 
+    {
+        return (protocolAllocations[protocol], protocolDeployedAmounts[protocol]);
+    }
+
+    /**
+     * @dev Get all protocol allocations and deployments
+     * @return protocols Array of protocol names
+     * @return allocations Array of allocation amounts
+     * @return deployments Array of deployed amounts
+     */
+    function getAllProtocolInfo() 
+        external 
+        view 
+        returns (
+            string[] memory protocols,
+            uint256[] memory allocations,
+            uint256[] memory deployments
+        ) 
+    {
+        uint256 length = _supportedProtocols.length;
+        protocols = new string[](length);
+        allocations = new uint256[](length);
+        deployments = new uint256[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            protocols[i] = _supportedProtocols[i];
+            allocations[i] = protocolAllocations[_supportedProtocols[i]];
+            deployments[i] = protocolDeployedAmounts[_supportedProtocols[i]];
+        }
+    }
+
     // Events
     event ProtocolAllocationChanged(string indexed protocol, uint256 oldAmount, uint256 newAmount);
     event ProtocolDeployed(string indexed protocol, uint256 amount);
