@@ -678,6 +678,30 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         }
     }
 
+    /*//////////////////////////////////////////////////////////////
+                        OWNER ACCESS CONTROL
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Transfer ownership of the vault
+     * @param newOwner Address of the new owner
+     * @notice Only current owner can transfer ownership
+     * @notice New owner cannot be zero address
+     */
+    function transferOwnership(address newOwner) public override onlyOwner {
+        if (newOwner == address(0)) revert ZeroAddress();
+        super.transferOwnership(newOwner);
+    }
+
+    /**
+     * @dev Renounce ownership of the vault
+     * @notice Only owner can renounce ownership
+     * @notice This action is irreversible
+     */
+    function renounceOwnership() public override onlyOwner {
+        super.renounceOwnership();
+    }
+
     // Events
     event ProtocolAllocationChanged(string indexed protocol, uint256 oldAmount, uint256 newAmount);
     event ProtocolDeployed(string indexed protocol, uint256 amount);
