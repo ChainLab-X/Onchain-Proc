@@ -485,6 +485,70 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         aaveLendingPool = lendingPool;
     }
 
+    /*//////////////////////////////////////////////////////////////
+                        COMPOUND INTEGRATION
+    //////////////////////////////////////////////////////////////*/
+
+    // Compound state
+    address private compoundCToken;
+    uint256 private compoundBalance;
+
+    /**
+     * @dev Deploy assets to Compound protocol
+     * @param amount Amount of assets to deploy to Compound
+     * @notice Only owner can deploy assets
+     * @notice Requires Compound address to be configured via factory
+     */
+    function deployToCompound(uint256 amount) external onlyOwner nonReentrant whenNotPaused {
+        if (amount == 0) revert InvalidAmount();
+        if (compoundCToken == address(0)) revert ProtocolNotConfigured();
+        if (amount > _asset.balanceOf(address(this))) revert InsufficientAssets();
+
+        // Update tracking
+        compoundBalance += amount;
+        protocolDeployedAmounts["Compound"] = compoundBalance;
+
+        // Transfer assets to Compound (placeholder - actual implementation requires Compound interface)
+        _asset.safeTransfer(compoundCToken, amount);
+
+        emit ProtocolDeployed("Compound", amount);
+    }
+
+    /**
+     * @dev Withdraw assets from Compound protocol
+     * @param amount Amount of assets to withdraw from Compound
+     * @notice Only owner can withdraw assets
+     */
+    function withdrawFromCompound(uint256 amount) external onlyOwner nonReentrant whenNotPaused {
+        if (amount == 0) revert InvalidAmount();
+        if (amount > compoundBalance) revert InsufficientAssets();
+
+        // Update tracking
+        compoundBalance -= amount;
+        protocolDeployedAmounts["Compound"] = compoundBalance;
+
+        // Withdraw from Compound (placeholder - actual implementation requires Compound interface)
+        // In real implementation, would call Compound's redeem function
+
+        emit ProtocolWithdrawn("Compound", amount);
+    }
+
+    /**
+     * @dev Get current Compound balance
+     * @return The amount of assets currently deployed to Compound
+     */
+    function getCompoundBalance() external view returns (uint256) {
+        return compoundBalance;
+    }
+
+    /**
+     * @dev Set Compound cToken address (internal, called by factory)
+     * @param cToken Address of Compound cToken contract
+     */
+    function _setCompoundAddress(address cToken) internal {
+        compoundCToken = cToken;
+    }
+
     // Events
     event ProtocolAllocationChanged(string indexed protocol, uint256 oldAmount, uint256 newAmount);
     event ProtocolDeployed(string indexed protocol, uint256 amount);
