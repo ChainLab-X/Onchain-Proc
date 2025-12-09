@@ -123,5 +123,35 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         uint256 supply = totalSupply();
         return supply == 0 ? shares : (shares * totalAssets()) / supply;
     }
+
+    /*//////////////////////////////////////////////////////////////
+                        DEPOSIT/WITHDRAW
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Deposits assets into the vault and mints shares to the receiver
+     * @param assets The amount of assets to deposit
+     * @param receiver The address that will receive the shares
+     * @return shares The amount of shares minted
+     * @notice Requires approval from caller to vault for asset transfer
+     */
+    function deposit(uint256 assets, address receiver) 
+        public 
+        virtual 
+        override 
+        nonReentrant 
+        whenNotPaused 
+        returns (uint256 shares) 
+    {
+        if (assets == 0) revert InvalidAmount();
+        
+        shares = previewDeposit(assets);
+        if (shares == 0) revert InvalidAmount();
+
+        _asset.safeTransferFrom(msg.sender, address(this), assets);
+        _mint(receiver, shares);
+
+        emit Deposit(msg.sender, receiver, assets, shares);
+    }
 }
 
