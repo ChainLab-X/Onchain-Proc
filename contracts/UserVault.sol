@@ -390,7 +390,39 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         return _supportedProtocols;
     }
 
+    /*//////////////////////////////////////////////////////////////
+                        PAUSE/UNPAUSE FUNCTIONALITY
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Pause vault operations (owner only)
+     * @notice Prevents deposits, withdrawals, mints, and redeems
+     */
+    function pause() external onlyOwner {
+        _pause();
+        emit VaultPaused(address(this), msg.sender);
+    }
+
+    /**
+     * @dev Unpause vault operations (owner only)
+     * @notice Resumes all vault operations
+     */
+    function unpause() external onlyOwner {
+        _unpause();
+        emit VaultUnpaused(address(this), msg.sender);
+    }
+
+    /**
+     * @dev Check if vault is paused
+     * @return True if vault is paused
+     */
+    function isPaused() external view returns (bool) {
+        return paused();
+    }
+
     // Events
     event ProtocolAllocationChanged(string indexed protocol, uint256 oldAmount, uint256 newAmount);
+    event VaultPaused(address indexed vault, address indexed pausedBy);
+    event VaultUnpaused(address indexed vault, address indexed unpausedBy);
 }
 
