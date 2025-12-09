@@ -549,6 +549,18 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         compoundCToken = cToken;
     }
 
+    /**
+     * @dev Initialize protocol addresses from factory (called after deployment)
+     * @notice Can only be called by factory contract
+     */
+    function initializeProtocolAddresses() external {
+        require(msg.sender == factory, "Only factory can initialize");
+        
+        // Get protocol addresses from factory
+        // This requires VaultFactory to have getter functions
+        // For now, this is a placeholder that can be extended
+    }
+
     // Events
     event ProtocolAllocationChanged(string indexed protocol, uint256 oldAmount, uint256 newAmount);
     event ProtocolDeployed(string indexed protocol, uint256 amount);
