@@ -25,6 +25,19 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
     // Factory address for protocol lookups
     address public immutable factory;
 
+    // Protocol allocation tracking
+    mapping(string => uint256) public protocolAllocations;
+    mapping(string => uint256) public protocolDeployedAmounts;
+    string[] private _supportedProtocols;
+
+    // Custom errors for gas optimization
+    error InvalidAmount();
+    error InsufficientAssets();
+    error InsufficientShares();
+    error InvalidProtocol();
+    error AllocationExceedsAssets();
+    error ProtocolNotConfigured();
+
     /**
      * @dev Constructor initializes the vault with asset and owner
      * @param asset_ Address of the underlying ERC20 asset
@@ -52,6 +65,38 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
      */
     function decimals() public view virtual override(ERC20, IERC20Metadata) returns (uint8) {
         return _decimals;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            ASSET
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Returns the address of the underlying asset
+     * @return The address of the asset token
+     */
+    function asset() public view virtual override returns (address) {
+        return address(_assetMetadata);
+    }
+
+    /**
+     * @dev Returns the total amount of assets managed by the vault
+     * @return The total amount of assets (balance + deployed to protocols)
+     */
+    function totalAssets() public view virtual override returns (uint256) {
+        return _asset.balanceOf(address(this)) + _getTotalDeployedAssets();
+    }
+
+    /**
+     * @dev Internal function to calculate total deployed assets across protocols
+     * @return Total amount of assets deployed to protocols
+     */
+    function _getTotalDeployedAssets() internal view returns (uint256) {
+        uint256 total = 0;
+        for (uint256 i = 0; i < _supportedProtocols.length; i++) {
+            total += protocolDeployedAmounts[_supportedProtocols[i]];
+        }
+        return total;
     }
 }
 
