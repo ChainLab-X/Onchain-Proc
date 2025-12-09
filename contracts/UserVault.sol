@@ -98,5 +98,30 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
         }
         return total;
     }
+
+    /*//////////////////////////////////////////////////////////////
+                            ACCOUNTING LOGIC
+    //////////////////////////////////////////////////////////////*/
+
+    /**
+     * @dev Converts assets to shares
+     * @param assets The amount of assets to convert
+     * @return shares The equivalent amount of shares
+     * @notice First deposit uses 1:1 ratio, subsequent deposits are proportional
+     */
+    function convertToShares(uint256 assets) public view virtual override returns (uint256 shares) {
+        uint256 supply = totalSupply();
+        return supply == 0 ? assets : (assets * supply) / totalAssets();
+    }
+
+    /**
+     * @dev Converts shares to assets
+     * @param shares The amount of shares to convert
+     * @return assets The equivalent amount of assets
+     */
+    function convertToAssets(uint256 shares) public view virtual override returns (uint256 assets) {
+        uint256 supply = totalSupply();
+        return supply == 0 ? shares : (shares * totalAssets()) / supply;
+    }
 }
 
