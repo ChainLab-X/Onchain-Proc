@@ -291,5 +291,43 @@ contract UserVault is ERC20, IERC4626, Ownable, ReentrancyGuard, Pausable {
     function previewRedeem(uint256 shares) public view virtual override returns (uint256 assets) {
         return convertToAssets(shares);
     }
+
+    /**
+     * @dev Returns the maximum amount of assets that can be deposited for a receiver
+     * @param receiver The address that will receive the shares
+     * @return The maximum amount of assets that can be deposited
+     * @notice Currently returns max uint256, can be overridden for limits
+     */
+    function maxDeposit(address) public view virtual override returns (uint256) {
+        return type(uint256).max;
+    }
+
+    /**
+     * @dev Returns the maximum amount of shares that can be minted for a receiver
+     * @param receiver The address that will receive the shares
+     * @return The maximum amount of shares that can be minted
+     * @notice Currently returns max uint256, can be overridden for limits
+     */
+    function maxMint(address) public view virtual override returns (uint256) {
+        return type(uint256).max;
+    }
+
+    /**
+     * @dev Returns the maximum amount of assets that can be withdrawn by an owner
+     * @param owner The address that owns the shares
+     * @return The maximum amount of assets that can be withdrawn
+     */
+    function maxWithdraw(address owner) public view virtual override returns (uint256) {
+        return convertToAssets(balanceOf(owner));
+    }
+
+    /**
+     * @dev Returns the maximum amount of shares that can be redeemed by an owner
+     * @param owner The address that owns the shares
+     * @return The maximum amount of shares that can be redeemed
+     */
+    function maxRedeem(address owner) public view virtual override returns (uint256) {
+        return balanceOf(owner);
+    }
 }
 
