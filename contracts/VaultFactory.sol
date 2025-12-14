@@ -8,14 +8,14 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  * @title VaultFactory
  * @dev Factory contract for creating and managing ERC-4626 vaults
  * @notice Users must register before creating vaults
- * 
+ *
  * Features:
  * - User registration with username and bio validation
  * - Username uniqueness enforcement
  * - Admin controls for user management
  * - Pause/unpause registration functionality
  * - Batch user info lookups for gas efficiency
- * 
+ *
  * Security:
  * - Reentrancy protection on state-changing functions
  * - Access control via OpenZeppelin Ownable
@@ -292,7 +292,7 @@ contract VaultFactory is Ownable, ReentrancyGuard {
         if (!registeredUsers[user]) {
             revert UserNotRegistered(user);
         }
-        
+
         // Validate new username if provided
         bytes memory newUsernameBytes = bytes(newUsername);
         if (newUsernameBytes.length > 0) {
@@ -305,13 +305,13 @@ contract VaultFactory is Ownable, ReentrancyGuard {
                 revert InvalidUsername("New username already taken");
             }
         }
-        
+
         // Validate new bio if provided
         bytes memory newBioBytes = bytes(newBio);
         if (newBioBytes.length > 0 && newBioBytes.length > MAX_BIO_LENGTH) {
             revert InvalidBio("New bio exceeds maximum length");
         }
-        
+
         // Update username mapping if changed
         string memory oldUsername = userUsernames[user];
         if (keccak256(bytes(oldUsername)) != keccak256(bytes(newUsername))) {
@@ -320,14 +320,14 @@ contract VaultFactory is Ownable, ReentrancyGuard {
                 usernameToAddress[newUsername] = user;
             }
         }
-        
+
         if (newUsernameBytes.length > 0) {
             userUsernames[user] = newUsername;
         }
         if (newBioBytes.length > 0) {
             userBios[user] = newBio;
         }
-        
+
         emit UserInfoUpdated(user, newUsername, newBio);
     }
 
@@ -346,7 +346,7 @@ contract VaultFactory is Ownable, ReentrancyGuard {
         delete userRegistrationTimestamps[user];
         delete usernameToAddress[username];
         _registeredUsersCount--;
-        
+
         emit UserRemoved(user);
     }
 
@@ -376,4 +376,4 @@ contract VaultFactory is Ownable, ReentrancyGuard {
     function getAddressByUsername(string memory username) external view returns (address) {
         return usernameToAddress[username];
     }
-
+}
