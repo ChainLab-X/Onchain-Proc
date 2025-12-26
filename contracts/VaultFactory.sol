@@ -172,3 +172,28 @@ contract VaultFactory is Ownable, ReentrancyGuard {
         return _registeredUsersCount;
     }
 
+    /**
+     * @dev Batch lookup user information for multiple addresses
+     * @param users Array of user addresses
+     * @return results Array of user info tuples
+     */
+    function batchGetUserInfo(address[] calldata users) external view returns (bool[] memory, string[] memory, string[] memory, uint256[] memory) {
+        uint256 length = users.length;
+        bool[] memory isRegistered = new bool[](length);
+        string[] memory usernames = new string[](length);
+        string[] memory bios = new string[](length);
+        uint256[] memory timestamps = new uint256[](length);
+
+        for (uint256 i = 0; i < length; i++) {
+            address user = users[i];
+            isRegistered[i] = registeredUsers[user];
+            if (isRegistered[i]) {
+                usernames[i] = userUsernames[user];
+                bios[i] = userBios[user];
+                timestamps[i] = userRegistrationTimestamps[user];
+            }
+        }
+
+        return (isRegistered, usernames, bios, timestamps);
+    }
+
