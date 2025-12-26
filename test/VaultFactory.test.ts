@@ -180,6 +180,54 @@ describe("VaultFactory", function () {
         vaultFactory.getUserInfo(user1.address)
       ).to.be.revertedWithCustomError(vaultFactory, "UserNotRegistered");
     });
+
+    it("Should check username availability", async function () {
+      expect(await vaultFactory.isUsernameAvailable("alice")).to.be.true;
+      await vaultFactory.connect(user1).registerUser("alice", "User 1");
+      expect(await vaultFactory.isUsernameAvailable("alice")).to.be.false;
+      expect(await vaultFactory.isUsernameAvailable("bob")).to.be.true;
+    });
+  });
+
+  describe("Integration Tests", function () {
+    it("Should handle complete registration flow", async function () {
+      // Register multiple users
+      await vaultFactory.connect(user1).registerUser("alice", "DeFi user");
+      await vaultFactory.connect(user2).registerUser("bob", "Trader");
+      
+      // Verify counts
+      expect(await vaultFactory.getRegisteredUsersCount()).to.equal(2);
+      
+      // Verify batch lookup
+      const [isRegistered] = await vaultFactory.batchGetUserInfo([user1.address, user2.address]);
+      expect(isRegistered[0]).to.be.true;
+      expect(isRegistered[1]).to.be.true;
+      
+      // Verify individual lookups
+      expect(await vaultFactory.isUserRegistered(user1.address)).to.be.true;
+      expect(await vaultFactory.isUserRegistered(user2.address)).to.be.true;
+    });
+
+    it("Should handle admin operations flow", async function () {
+      await vaultFactory.connect(user1).registerUser("alice", "Original bio");
+      
+      // Pause registration
+      await vaultFactory.pauseRegistration();
+      await expect(
+        vaultFactory.connect(user2).registerUser("bob", "Should fail")
+      ).to.be.revertedWithCustomError(vaultFactory, "InvalidUsername");
+      
+      // Unpause and register
+      await vaultFactory.unpauseRegistration();
+      await vaultFactory.connect(user2).registerUser("bob", "Should work");
+      expect(await vaultFactory.isUserRegistered(user2.address)).to.be.true;
+      
+      // Update user info
+      await vaultFactory.adminUpdateUserInfo(user1.address, "alice_updated", "Updated bio");
+      const [username, bio] = await vaultFactory.getUserInfo(user1.address);
+      expect(username).to.equal("alice_updated");
+      expect(bio).to.equal("Updated bio");
+    });
   });
 });
 
