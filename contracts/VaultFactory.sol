@@ -8,6 +8,19 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  * @title VaultFactory
  * @dev Factory contract for creating and managing ERC-4626 vaults
  * @notice Users must register before creating vaults
+ * 
+ * Features:
+ * - User registration with username and bio validation
+ * - Username uniqueness enforcement
+ * - Admin controls for user management
+ * - Pause/unpause registration functionality
+ * - Batch user info lookups for gas efficiency
+ * 
+ * Security:
+ * - Reentrancy protection on state-changing functions
+ * - Access control via OpenZeppelin Ownable
+ * - Input validation on all user inputs
+ * - Custom errors for gas optimization
  */
 contract VaultFactory is Ownable, ReentrancyGuard {
     // User registration mappings
